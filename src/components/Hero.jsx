@@ -35,7 +35,7 @@ const Hero = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6, duration: 0.8 }}
         >
-          4th Year Student at Adigrat University · Building Apps & Websites for Ethiopia 🇪🇹
+          4th Year Student at Adigrat University · Building Apps & Websites
         </motion.p>
         
         <motion.div 
