@@ -6,8 +6,8 @@ const Projects = () => {
   const projects = [
     {
       title: 'Real Estate App',
-      description: 'A full-stack real estate platform where users can browse, list, and find properties for sale or rent. Built with modern web technologies.',
-      tech: ['React', 'Node.js', 'SQL', 'CSS'],
+      description: 'A full-featured Android real estate app where users can browse, list, and find properties for sale or rent. Built with modern Android development tools.',
+      tech: ['Kotlin', 'Jetpack Compose', 'Firebase', 'Firestore', 'OSMDroid Maps', 'Material 3'],
       image: '🏠',
       link: 'https://github.com/fili112',
       github: 'https://github.com/fili112'
