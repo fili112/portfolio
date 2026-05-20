@@ -26,7 +26,7 @@ const Hero = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 0.8 }}
         >
-          Software Engineering Student
+          Full Stack Developer & Software Engineering Student
         </motion.h2>
         
         <motion.p 
@@ -35,7 +35,7 @@ const Hero = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6, duration: 0.8 }}
         >
-          Building innovative solutions for Tigray and beyond
+          4th Year Student at Adigrat University · Building Apps & Websites for Ethiopia 🇪🇹
         </motion.p>
         
         <motion.div 

@@ -5,28 +5,28 @@ import './Projects.css'
 const Projects = () => {
   const projects = [
     {
-      title: 'Portfolio Website',
-      description: 'A modern, responsive portfolio website with 3D animated background built with React and Framer Motion.',
-      tech: ['React', 'Framer Motion', 'CSS3'],
-      image: '🎨',
+      title: 'Real Estate App',
+      description: 'A full-stack real estate platform where users can browse, list, and find properties for sale or rent. Built with modern web technologies.',
+      tech: ['React', 'Node.js', 'SQL', 'CSS'],
+      image: '🏠',
       link: 'https://github.com/fili112',
       github: 'https://github.com/fili112'
     },
     {
-      title: 'Coming Soon',
-      description: 'Your next amazing project will be displayed here. Stay tuned for updates!',
-      tech: ['React', 'Node.js', 'MongoDB'],
-      image: '🚀',
-      link: '#',
-      github: '#'
+      title: 'Portfolio Website',
+      description: 'My personal portfolio website with stunning 3D animated background, smooth animations, and Supabase backend for contact form messages.',
+      tech: ['React', 'Framer Motion', 'Supabase', 'Vite'],
+      image: '🎨',
+      link: 'https://portfolio-szk8.vercel.app',
+      github: 'https://github.com/fili112/portfolio'
     },
     {
-      title: 'Future Project',
-      description: 'Another exciting project in development. This could be your marketplace app or any other innovative solution.',
-      tech: ['React Native', 'Firebase', 'TypeScript'],
-      image: '💡',
-      link: '#',
-      github: '#'
+      title: 'Tigray Marketplace App',
+      description: 'Coming soon! A local marketplace connecting buyers and sellers in Tigray. Helping local businesses grow through technology.',
+      tech: ['React Native', 'Supabase', 'Node.js'],
+      image: '🛒',
+      link: 'https://github.com/fili112',
+      github: 'https://github.com/fili112'
     }
   ]
 

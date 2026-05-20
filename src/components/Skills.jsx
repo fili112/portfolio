@@ -7,11 +7,15 @@ const Skills = () => {
     { name: 'HTML/CSS', level: 90, icon: '🎨' },
     { name: 'JavaScript', level: 85, icon: '⚡' },
     { name: 'React', level: 80, icon: '⚛️' },
-    { name: 'Node.js', level: 75, icon: '🟢' },
-    { name: 'Python', level: 70, icon: '🐍' },
+    { name: 'Python', level: 80, icon: '🐍' },
+    { name: 'Java', level: 75, icon: '☕' },
+    { name: 'C/C++', level: 75, icon: '⚙️' },
+    { name: 'Node.js', level: 78, icon: '🟢' },
     { name: 'Git/GitHub', level: 85, icon: '📦' },
-    { name: 'SQL', level: 75, icon: '🗄️' },
+    { name: 'SQL/Database', level: 80, icon: '🗄️' },
+    { name: 'React Native', level: 70, icon: '📱' },
     { name: 'Problem Solving', level: 90, icon: '🧩' },
+    { name: 'Full Stack Dev', level: 80, icon: '🚀' },
   ]
 
   return (
