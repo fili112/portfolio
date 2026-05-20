@@ -71,7 +71,7 @@ const About = () => {
             </div>
             <div className="info-item">
               <span className="info-label">🎯 Goal:</span>
-              <span className="info-value">Build Apps & Websites for Ethiopia</span>
+              <span className="info-value">Build Apps & Websites</span>
             </div>
           </div>
         </motion.div>
