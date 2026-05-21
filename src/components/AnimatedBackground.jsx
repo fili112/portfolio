@@ -49,26 +49,32 @@ const AnimatedBackground = () => {
         const scale = 1000 / (1000 + this.z)
         const x2d = (this.x - canvas.width / 2) * scale + canvas.width / 2
         const y2d = (this.y - canvas.height / 2) * scale + canvas.height / 2
-        const radius2d = this.radius * scale
+        const radius2d = this.radius * scale * 2
 
         const opacity = 1 - this.z / 1000
-        const hue = 200 + (this.z / 1000) * 60
+        const hue = 200 + (this.z / 1000) * 160
+
+        // Glowing effect
+        ctx.shadowBlur = 15
+        ctx.shadowColor = `hsla(${hue}, 100%, 70%, ${opacity})`
 
         ctx.beginPath()
         ctx.arc(x2d, y2d, radius2d, 0, Math.PI * 2)
-        ctx.fillStyle = `hsla(${hue}, 70%, 60%, ${opacity * 0.8})`
+        ctx.fillStyle = `hsla(${hue}, 100%, 75%, ${opacity})`
         ctx.fill()
+
+        ctx.shadowBlur = 0
       }
     }
 
-    // Create particles
-    for (let i = 0; i < 150; i++) {
+    // Create particles - more particles for brightness
+    for (let i = 0; i < 200; i++) {
       particles.push(new Particle())
     }
 
     // Animation loop
     const animate = () => {
-      ctx.fillStyle = 'rgba(10, 10, 10, 0.1)'
+      ctx.fillStyle = 'rgba(8, 8, 20, 0.15)'
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
       particles.forEach(particle => {
@@ -76,18 +82,20 @@ const AnimatedBackground = () => {
         particle.draw()
       })
 
-      // Draw connections
+      // Draw connections - brighter lines
       particles.forEach((p1, i) => {
         particles.slice(i + 1).forEach(p2 => {
           const dx = p1.x - p2.x
           const dy = p1.y - p2.y
           const distance = Math.sqrt(dx * dx + dy * dy)
 
-          if (distance < 150) {
-            const opacity = (1 - distance / 150) * 0.3
+          if (distance < 180) {
+            const opacity = (1 - distance / 180) * 0.6
             ctx.beginPath()
-            ctx.strokeStyle = `rgba(102, 126, 234, ${opacity})`
-            ctx.lineWidth = 0.5
+            ctx.strokeStyle = `rgba(140, 160, 255, ${opacity})`
+            ctx.lineWidth = 1
+            ctx.shadowBlur = 5
+            ctx.shadowColor = `rgba(140, 160, 255, ${opacity})`
             ctx.moveTo(
               (p1.x - canvas.width / 2) * (1000 / (1000 + p1.z)) + canvas.width / 2,
               (p1.y - canvas.height / 2) * (1000 / (1000 + p1.z)) + canvas.height / 2
@@ -97,6 +105,7 @@ const AnimatedBackground = () => {
               (p2.y - canvas.height / 2) * (1000 / (1000 + p2.z)) + canvas.height / 2
             )
             ctx.stroke()
+            ctx.shadowBlur = 0
           }
         })
       })
