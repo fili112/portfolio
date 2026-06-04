@@ -9,7 +9,6 @@ const Projects = () => {
       description: 'A full-featured Android real estate app where users can browse, list, and find properties for sale or rent. Built with modern Android development tools.',
       tech: ['Kotlin', 'Jetpack Compose', 'Firebase', 'Firestore', 'OSMDroid Maps', 'Material 3'],
       image: '🏠',
-      link: 'https://github.com/fili112',
       github: 'https://github.com/fili112'
     },
     {
@@ -17,16 +16,7 @@ const Projects = () => {
       description: 'My personal portfolio website with stunning 3D animated background, smooth animations, and Supabase backend for contact form messages.',
       tech: ['React', 'Framer Motion', 'Supabase', 'Vite'],
       image: '🎨',
-      link: 'https://portfolio-szk8.vercel.app',
       github: 'https://github.com/fili112/portfolio'
-    },
-    {
-      title: 'Tigray Marketplace App',
-      description: 'Coming soon! A local marketplace connecting buyers and sellers in Tigray. Helping local businesses grow through technology.',
-      tech: ['React Native', 'Supabase', 'Node.js'],
-      image: '🛒',
-      link: 'https://github.com/fili112',
-      github: 'https://github.com/fili112'
     }
   ]
 
@@ -68,11 +58,8 @@ const Projects = () => {
               </div>
               
               <div className="project-links">
-                <a href={project.link} target="_blank" rel="noopener noreferrer" className="project-link">
-                  <span>View Project</span>
-                </a>
-                <a href={project.github} target="_blank" rel="noopener noreferrer" className="project-link">
-                  <span>GitHub</span>
+                <a href={project.github} target="_blank" rel="noopener noreferrer" className="project-link github-link">
+                  <span>View Code on GitHub</span>
                 </a>
               </div>
             </div>
