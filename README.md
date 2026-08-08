@@ -1,48 +1,23 @@
-# My Portfolio Website
+My Portfolio Website
 
 A modern, professional portfolio website built with React, featuring stunning 3D animated backgrounds and smooth animations.
+ Features
 
-## 🚀 Features
+-  Modern and clean design
+-  3D animated particle background
+-  Fully responsive (mobile, tablet, desktop)
+-  Smooth animations with Framer Motion
+-  Easy to customize
+-  Fast and optimized
 
-- ✨ Modern and clean design
-- 🎨 3D animated particle background
-- 📱 Fully responsive (mobile, tablet, desktop)
-- ⚡ Smooth animations with Framer Motion
-- 🎯 Easy to customize
-- 🌐 Fast and optimized
+ Technologies Used
 
-## 🛠️ Technologies Used
+- React- UI library
+- Vite - Build tool
+- Framer Motion - Animation library
+- CSS3 - Styling
 
-- **React** - UI library
-- **Vite** - Build tool
-- **Framer Motion** - Animation library
-- **CSS3** - Styling
-
-## 📦 Installation
-
-1. Install dependencies:
-```bash
-npm install
-```
-
-2. Start the development server:
-```bash
-npm run dev
-```
-
-3. Open your browser and visit `http://localhost:5173`
-
-## 🎨 Customization
-
-### Update Your Information
-
-1. **Personal Info**: Edit `src/components/Hero.jsx` to update your name and title
-2. **About Section**: Edit `src/components/About.jsx` to add your story
-3. **Skills**: Edit `src/components/Skills.jsx` to add/remove skills
-4. **Projects**: Edit `src/components/Projects.jsx` to showcase your work
-5. **Contact**: Edit `src/components/Contact.jsx` to add your contact details
-
-### Add Your Photo
+Add Your Photo
 
 Replace the placeholder in `src/components/About.jsx`:
 ```jsx
@@ -51,7 +26,7 @@ Replace the placeholder in `src/components/About.jsx`:
 </div>
 ```
 
-### Change Colors
+ Change Colors
 
 The main gradient colors are defined in the CSS files. Look for:
 ```css
@@ -60,7 +35,7 @@ background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 
 Change `#667eea` and `#764ba2` to your preferred colors.
 
-## 📁 Project Structure
+Project Structure
 
 ```
 portfolio/
@@ -82,24 +57,22 @@ portfolio/
 └── vite.config.js
 ```
 
-## 🚀 Deployment
+ Deployment
 
-### Build for Production
+Build for Production
 
 ```bash
 npm run build
 ```
 
 This creates a `dist` folder with optimized files.
+Deploy Options
 
-### Deploy Options
-
-- **Vercel**: Connect your GitHub repo and deploy automatically
-- **Netlify**: Drag and drop the `dist` folder
-- **GitHub Pages**: Use `gh-pages` package
-- **Firebase Hosting**: Use Firebase CLI
-
-## 📝 To-Do
+- Vercel: Connect your GitHub repo and deploy automatically
+- Netlify: Drag and drop the `dist` folder
+- GitHub Pages: Use `gh-pages` package
+- Firebase Hosting: Use Firebase CLI
+To-Do
 
 - [ ] Add your personal information
 - [ ] Replace placeholder photo
@@ -109,21 +82,21 @@ This creates a `dist` folder with optimized files.
 - [ ] Customize colors to match your brand
 - [ ] Add more sections if needed
 
-## 🤝 Contributing
+ Contributing
 
 Feel free to fork this project and customize it for your own use!
 
-## 📄 License
+License
 
 This project is open source and available under the MIT License.
 
-## 👨‍💻 Author
+ Author
 
-**Filmon Amare**
+Filmon Amare
 - Location: Mekelle, Tigray, Ethiopia
 - Email: filmonamare70@gmail.com
 - Phone: +251 968 748 912
 
 ---
 
-Built with ❤️ in Mekelle, Tigray
+Built  in Mekelle, Tigray
