@@ -1,0 +1,163 @@
+.journey-section {
+  position: relative;
+  z-index: 1;
+}
+
+.timeline-container {
+  position: relative;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 40px 0;
+}
+
+.timeline-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  background: linear-gradient(
+    180deg,
+    rgba(99, 102, 241, 0.1) 0%,
+    rgba(99, 102, 241, 0.8) 30%,
+    rgba(168, 85, 247, 0.8) 70%,
+    rgba(56, 189, 248, 0.2) 100%
+  );
+  transform: translateX(-50%);
+  z-index: 0;
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 50px;
+  display: flex;
+  width: 100%;
+}
+
+.timeline-item.left {
+  justify-content: flex-start;
+  padding-right: calc(50% + 30px);
+}
+
+.timeline-item.right {
+  justify-content: flex-end;
+  padding-left: calc(50% + 30px);
+}
+
+/* Timeline Node */
+.timeline-node {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #0d1222;
+  border: 2px solid var(--accent-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.6);
+  z-index: 2;
+  transition: all var(--transition-fast);
+}
+
+.timeline-item:hover .timeline-node {
+  transform: translateX(-50%) scale(1.15);
+  box-shadow: 0 0 25px rgba(99, 102, 241, 0.9);
+  border-color: #38bdf8;
+}
+
+.node-icon {
+  font-size: 1.15rem;
+  color: #ffffff;
+  display: flex;
+}
+
+/* Timeline Card */
+.timeline-card {
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 26px 28px;
+  transition: all var(--transition-normal);
+  width: 100%;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+}
+
+.timeline-card:hover {
+  border-color: rgba(99, 102, 241, 0.45);
+  background: rgba(24, 34, 60, 0.75);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 35px -10px rgba(0, 0, 0, 0.7), 0 0 20px rgba(99, 102, 241, 0.15);
+}
+
+.timeline-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.timeline-period {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--accent-secondary);
+  letter-spacing: 0.06em;
+}
+
+.timeline-tag {
+  font-size: 0.72rem;
+  padding: 3px 10px;
+  background: rgba(99, 102, 241, 0.12);
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  border-radius: 999px;
+  color: #a5b4fc;
+  font-family: var(--font-mono);
+}
+
+.timeline-title {
+  font-size: 1.22rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 4px;
+}
+
+.timeline-institution {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+.timeline-desc {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+@media (max-width: 820px) {
+  .timeline-line {
+    left: 24px;
+  }
+
+  .timeline-item.left,
+  .timeline-item.right {
+    padding-left: 65px;
+    padding-right: 0;
+    justify-content: flex-start;
+  }
+
+  .timeline-node {
+    left: 24px;
+  }
+
+  .timeline-item:hover .timeline-node {
+    transform: translateX(-50%) scale(1.1);
+  }
+}

@@ -1,22 +1,40 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
-import { supabase } from '../lib/supabase'
+import {
+  FaEnvelope,
+  FaPhone,
+  FaMapMarkerAlt,
+  FaGithub,
+  FaLinkedin,
+  FaPaperPlane,
+  FaCheck,
+  FaCopy,
+} from 'react-icons/fa'
+import { FaXTwitter } from 'react-icons/fa6'
+import { supabase, isSupabaseConfigured } from '../lib/supabase'
 import './Contact.css'
 
 const Contact = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    message: ''
+    message: '',
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState('')
+  const [copiedField, setCopiedField] = useState(null)
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     })
+  }
+
+  const copyToClipboard = (text, fieldName) => {
+    navigator.clipboard.writeText(text)
+    setCopiedField(fieldName)
+    setTimeout(() => setCopiedField(null), 2500)
   }
 
   const handleSubmit = async (e) => {
@@ -25,158 +43,260 @@ const Contact = () => {
     setSubmitStatus('')
 
     try {
-      // Save message to Supabase
-      const { error } = await supabase
-        .from('messages')
-        .insert([
-          {
-            name: formData.name,
-            email: formData.email,
-            message: formData.message,
-          }
-        ])
+      if (!isSupabaseConfigured) {
+        // Fallback: save to localStorage when Supabase env credentials are not configured yet
+        const localList = JSON.parse(localStorage.getItem('portfolio_messages') || '[]')
+        localList.push({
+          id: Date.now(),
+          ...formData,
+          created_at: new Date().toISOString(),
+          is_read: false
+        })
+        localStorage.setItem('portfolio_messages', JSON.stringify(localList))
+        setSubmitStatus('success')
+        setFormData({ name: '', email: '', message: '' })
+        return
+      }
+
+      const { error } = await supabase.from('messages').insert([
+        {
+          name: formData.name,
+          email: formData.email,
+          message: formData.message,
+        },
+      ])
 
       if (error) throw error
 
-      // Success!
       setSubmitStatus('success')
       setFormData({ name: '', email: '', message: '' })
-
     } catch (error) {
       console.error('Error sending message:', error)
       setSubmitStatus('error')
     } finally {
       setIsSubmitting(false)
-      // Clear status after 5 seconds
-      setTimeout(() => setSubmitStatus(''), 5000)
+      setTimeout(() => setSubmitStatus(''), 6000)
     }
   }
 
+  const contactMethods = [
+    {
+      id: 'email',
+      icon: <FaEnvelope />,
+      title: 'Email Address',
+      value: 'filmonamare70@gmail.com',
+      copyVal: 'filmonamare70@gmail.com',
+      actionLabel: 'Click to copy',
+    },
+    {
+      id: 'phone',
+      icon: <FaPhone />,
+      title: 'Phone / WhatsApp',
+      value: '+251 968 748 912',
+      copyVal: '+251968748912',
+      actionLabel: 'Click to copy',
+    },
+    {
+      id: 'location',
+      icon: <FaMapMarkerAlt />,
+      title: 'Location',
+      value: 'Mekelle, Tigray, Ethiopia',
+      copyVal: null,
+      actionLabel: 'UTC+3 / EAT',
+    },
+  ]
+
   return (
     <section id="contact" className="contact">
-      <motion.h2 
-        className="section-title"
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-      >
-        Get In Touch
-      </motion.h2>
+      <div className="section-header">
+        <span className="section-pill">04 // GET IN TOUCH</span>
+        <h2 className="section-title">Let's Build Together</h2>
+        <p className="section-subtitle">
+          Have an exciting project, internship opportunity, or question? Send a message and let's create something remarkable.
+        </p>
+      </div>
 
-      <div className="contact-content">
-        <motion.div 
-          className="contact-info"
-          initial={{ opacity: 0, x: -50 }}
+      <div className="contact-container">
+        {/* Contact Info Column */}
+        <motion.div
+          className="contact-info-column"
+          initial={{ opacity: 0, x: -35 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h3>Let's Work Together</h3>
-          <p>
-            I'm always open to discussing new projects, creative ideas, 
-            or opportunities to be part of your vision.
-          </p>
+          <div className="contact-info-card">
+            <h3 className="info-title">Contact Channels</h3>
+            <p className="info-subtitle">
+              Feel free to reach out directly through any of these communication channels. I respond promptly!
+            </p>
 
-          <div className="contact-details">
-            <div className="contact-item">
-              <span className="contact-icon">📧</span>
-              <div>
-                <h4>Email</h4>
-                <p>filmonamare70@gmail.com</p>
-              </div>
+            <div className="channels-list">
+              {contactMethods.map((method) => (
+                <div
+                  key={method.id}
+                  className={`channel-item ${method.copyVal ? 'clickable' : ''}`}
+                  onClick={() =>
+                    method.copyVal && copyToClipboard(method.copyVal, method.id)
+                  }
+                >
+                  <div className="channel-icon">{method.icon}</div>
+                  <div className="channel-text">
+                    <span className="channel-label">{method.title}</span>
+                    <span className="channel-val">{method.value}</span>
+                  </div>
+                  {method.copyVal && (
+                    <div className="channel-copy-btn" title="Copy to clipboard">
+                      {copiedField === method.id ? (
+                        <span className="copied-text">
+                          <FaCheck /> Copied
+                        </span>
+                      ) : (
+                        <FaCopy className="copy-icon" />
+                      )}
+                    </div>
+                  )}
+                </div>
+              ))}
             </div>
 
-            <div className="contact-item">
-              <span className="contact-icon">📱</span>
-              <div>
-                <h4>Phone</h4>
-                <p>+251 968 748 912</p>
+            {/* Social Connect Links */}
+            <div className="social-connect-block">
+              <span className="social-label">Find Me Online:</span>
+              <div className="social-buttons-grid">
+                <a
+                  href="https://github.com/fili112"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="social-btn"
+                  title="GitHub"
+                >
+                  <FaGithub />
+                  <span>GitHub</span>
+                </a>
+                <a
+                  href="https://linkedin.com/in/filmon-amare"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="social-btn"
+                  title="LinkedIn"
+                >
+                  <FaLinkedin />
+                  <span>LinkedIn</span>
+                </a>
+                <a
+                  href="https://twitter.com/filmonamare"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="social-btn"
+                  title="Twitter / X"
+                >
+                  <FaXTwitter />
+                  <span>Twitter</span>
+                </a>
               </div>
             </div>
-
-            <div className="contact-item">
-              <span className="contact-icon">📍</span>
-              <div>
-                <h4>Location</h4>
-                <p>Mekelle, Tigray, Ethiopia</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="social-links">
-            <a href="https://github.com/fili112" target="_blank" rel="noopener noreferrer" className="social-link" title="GitHub">
-              <span>GitHub</span>
-            </a>
-            <a href="https://linkedin.com/in/filmon-amare" target="_blank" rel="noopener noreferrer" className="social-link" title="LinkedIn">
-              <span>LinkedIn</span>
-            </a>
-            <a href="https://twitter.com/filmonamare" target="_blank" rel="noopener noreferrer" className="social-link" title="Twitter">
-              <span>Twitter</span>
-            </a>
           </div>
         </motion.div>
 
-        <motion.form 
-          className="contact-form"
-          onSubmit={handleSubmit}
-          initial={{ opacity: 0, x: 50 }}
+        {/* Contact Form Column */}
+        <motion.div
+          className="contact-form-column"
+          initial={{ opacity: 0, x: 35 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <div className="form-group">
-            <input
-              type="text"
-              name="name"
-              placeholder="Your Name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-            />
-          </div>
+          <form className="modern-contact-form" onSubmit={handleSubmit}>
+            <h3 className="form-heading">Send a Direct Message</h3>
 
-          <div className="form-group">
-            <input
-              type="email"
-              name="email"
-              placeholder="Your Email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
-          </div>
+            <div className="input-group">
+              <label htmlFor="name" className="input-label">
+                Your Name
+              </label>
+              <input
+                id="name"
+                type="text"
+                name="name"
+                placeholder="e.g. Alex Johnson"
+                value={formData.name}
+                onChange={handleChange}
+                required
+                className="form-input"
+              />
+            </div>
 
-          <div className="form-group">
-            <textarea
-              name="message"
-              placeholder="Your Message"
-              rows="6"
-              value={formData.message}
-              onChange={handleChange}
-              required
-            ></textarea>
-          </div>
+            <div className="input-group">
+              <label htmlFor="email" className="input-label">
+                Email Address
+              </label>
+              <input
+                id="email"
+                type="email"
+                name="email"
+                placeholder="alex@company.com"
+                value={formData.email}
+                onChange={handleChange}
+                required
+                className="form-input"
+              />
+            </div>
 
-          <button type="submit" className="submit-btn" disabled={isSubmitting}>
-            {isSubmitting ? (
-              <span className="btn-loading">
-                <span className="spinner"></span> Sending...
-              </span>
-            ) : 'Send Message'}
-          </button>
+            <div className="input-group">
+              <label htmlFor="message" className="input-label">
+                Your Message
+              </label>
+              <textarea
+                id="message"
+                name="message"
+                rows="5"
+                placeholder="Tell me about your project, idea, or questions..."
+                value={formData.message}
+                onChange={handleChange}
+                required
+                className="form-textarea"
+              ></textarea>
+            </div>
 
-          {submitStatus === 'success' && (
-            <p className="status-message success">
-              ✅ Message sent! I'll get back to you soon, {formData.name || 'friend'}!
-            </p>
-          )}
-          {submitStatus === 'error' && (
-            <p className="status-message error">
-              ❌ Something went wrong. Please email me at filmonamare70@gmail.com
-            </p>
-          )}
-        </motion.form>
+            <button
+              type="submit"
+              className="btn btn-primary submit-contact-btn"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? (
+                <>
+                  <span className="submit-spinner"></span>
+                  <span>Sending Message...</span>
+                </>
+              ) : (
+                <>
+                  <FaPaperPlane />
+                  <span>Send Message</span>
+                </>
+              )}
+            </button>
+
+            {submitStatus === 'success' && (
+              <motion.div
+                className="form-alert alert-success"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+              >
+                <FaCheck /> Message delivered successfully! I will reach out to you shortly.
+              </motion.div>
+            )}
+
+            {submitStatus === 'error' && (
+              <motion.div
+                className="form-alert alert-error"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+              >
+                ⚠️ Message failed to send. Please write directly to filmonamare70@gmail.com
+              </motion.div>
+            )}
+          </form>
+        </motion.div>
       </div>
     </section>
   )

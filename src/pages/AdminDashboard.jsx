@@ -15,21 +15,36 @@ const AdminDashboard = () => {
   }, [])
 
   const checkAuth = async () => {
-    const { data: { session } } = await supabase.auth.getSession()
-    if (!session) {
+    try {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) {
+        navigate('/admin')
+      }
+    } catch {
       navigate('/admin')
     }
   }
 
   const fetchMessages = async () => {
     setLoading(true)
-    const { data, error } = await supabase
-      .from('messages')
-      .select('*')
-      .order('created_at', { ascending: false })
+    try {
+      const { data, error } = await supabase
+        .from('messages')
+        .select('*')
+        .order('created_at', { ascending: false })
 
-    if (!error) setMessages(data || [])
-    setLoading(false)
+      if (!error && data) {
+        setMessages(data)
+      } else {
+        const local = JSON.parse(localStorage.getItem('portfolio_messages') || '[]')
+        setMessages(local)
+      }
+    } catch {
+      const local = JSON.parse(localStorage.getItem('portfolio_messages') || '[]')
+      setMessages(local)
+    } finally {
+      setLoading(false)
+    }
   }
 
   const markAsRead = async (id) => {

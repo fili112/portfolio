@@ -6,108 +6,123 @@ const AnimatedBackground = () => {
 
   useEffect(() => {
     const canvas = canvasRef.current
+    if (!canvas) return
     const ctx = canvas.getContext('2d')
     let animationFrameId
     let particles = []
+    let mouse = { x: null, y: null, radius: 140 }
 
-    // Set canvas size
     const resizeCanvas = () => {
-      canvas.width = window.innerWidth
-      canvas.height = window.innerHeight
+      const dpr = window.devicePixelRatio || 1
+      canvas.width = window.innerWidth * dpr
+      canvas.height = window.innerHeight * dpr
+      ctx.scale(dpr, dpr)
     }
     resizeCanvas()
     window.addEventListener('resize', resizeCanvas)
 
-    // Particle class
+    const handleMouseMove = (e) => {
+      mouse.x = e.clientX
+      mouse.y = e.clientY
+    }
+
+    const handleTouchMove = (e) => {
+      if (e.touches.length > 0) {
+        mouse.x = e.touches[0].clientX
+        mouse.y = e.touches[0].clientY
+      }
+    }
+
+    const handleMouseLeave = () => {
+      mouse.x = null
+      mouse.y = null
+    }
+
+    window.addEventListener('mousemove', handleMouseMove)
+    window.addEventListener('touchmove', handleTouchMove, { passive: true })
+    window.addEventListener('mouseleave', handleMouseLeave)
+    window.addEventListener('touchend', handleMouseLeave)
+
     class Particle {
       constructor() {
-        this.x = Math.random() * canvas.width
-        this.y = Math.random() * canvas.height
-        this.z = Math.random() * 1000
-        this.vx = (Math.random() - 0.5) * 0.5
-        this.vy = (Math.random() - 0.5) * 0.5
-        this.vz = Math.random() * 2 + 1
-        this.radius = Math.random() * 2 + 1
+        this.x = Math.random() * window.innerWidth
+        this.y = Math.random() * window.innerHeight
+        this.size = Math.random() * 2 + 1.2
+        this.speedX = (Math.random() - 0.5) * 0.4
+        this.speedY = (Math.random() - 0.5) * 0.4
+        this.colorSeed = Math.random()
+        this.alpha = Math.random() * 0.4 + 0.3
       }
 
       update() {
-        this.z -= this.vz
-        if (this.z <= 0) {
-          this.z = 1000
-          this.x = Math.random() * canvas.width
-          this.y = Math.random() * canvas.height
+        this.x += this.speedX
+        this.y += this.speedY
+
+        if (this.x < 0) this.x = window.innerWidth
+        if (this.x > window.innerWidth) this.x = 0
+        if (this.y < 0) this.y = window.innerHeight
+        if (this.y > window.innerHeight) this.y = 0
+
+        if (mouse.x !== null && mouse.y !== null) {
+          const dx = mouse.x - this.x
+          const dy = mouse.y - this.y
+          const dist = Math.sqrt(dx * dx + dy * dy)
+          if (dist < mouse.radius) {
+            const force = (mouse.radius - dist) / mouse.radius
+            const angle = Math.atan2(dy, dx)
+            this.x -= Math.cos(angle) * force * 2.2
+            this.y -= Math.sin(angle) * force * 2.2
+          }
         }
-
-        this.x += this.vx
-        this.y += this.vy
-
-        if (this.x < 0 || this.x > canvas.width) this.vx *= -1
-        if (this.y < 0 || this.y > canvas.height) this.vy *= -1
       }
 
       draw() {
-        const scale = 1000 / (1000 + this.z)
-        const x2d = (this.x - canvas.width / 2) * scale + canvas.width / 2
-        const y2d = (this.y - canvas.height / 2) * scale + canvas.height / 2
-        const radius2d = this.radius * scale * 2
-
-        const opacity = 1 - this.z / 1000
-        const hue = 200 + (this.z / 1000) * 160
-
-        // Glowing effect
-        ctx.shadowBlur = 15
-        ctx.shadowColor = `hsla(${hue}, 100%, 70%, ${opacity})`
-
         ctx.beginPath()
-        ctx.arc(x2d, y2d, radius2d, 0, Math.PI * 2)
-        ctx.fillStyle = `hsla(${hue}, 100%, 75%, ${opacity})`
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2)
+        const color =
+          this.colorSeed > 0.5
+            ? `rgba(99, 102, 241, ${this.alpha})`
+            : `rgba(56, 189, 248, ${this.alpha})`
+        ctx.fillStyle = color
+        ctx.shadowBlur = 8
+        ctx.shadowColor = color
         ctx.fill()
-
         ctx.shadowBlur = 0
       }
     }
 
-    // Create particles - more particles for brightness
-    for (let i = 0; i < 200; i++) {
+    const particleCount = Math.min(
+      Math.floor((window.innerWidth * window.innerHeight) / 12000),
+      85
+    )
+    for (let i = 0; i < particleCount; i++) {
       particles.push(new Particle())
     }
 
-    // Animation loop
     const animate = () => {
-      ctx.fillStyle = 'rgba(8, 8, 20, 0.15)'
-      ctx.fillRect(0, 0, canvas.width, canvas.height)
+      ctx.clearRect(0, 0, window.innerWidth, window.innerHeight)
 
-      particles.forEach(particle => {
-        particle.update()
-        particle.draw()
-      })
-
-      // Draw connections - brighter lines
-      particles.forEach((p1, i) => {
-        particles.slice(i + 1).forEach(p2 => {
-          const dx = p1.x - p2.x
-          const dy = p1.y - p2.y
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x
+          const dy = particles[i].y - particles[j].y
           const distance = Math.sqrt(dx * dx + dy * dy)
 
-          if (distance < 180) {
-            const opacity = (1 - distance / 180) * 0.6
+          if (distance < 130) {
+            const opacity = (1 - distance / 130) * 0.18
             ctx.beginPath()
-            ctx.strokeStyle = `rgba(140, 160, 255, ${opacity})`
-            ctx.lineWidth = 1
-            ctx.shadowBlur = 5
-            ctx.shadowColor = `rgba(140, 160, 255, ${opacity})`
-            ctx.moveTo(
-              (p1.x - canvas.width / 2) * (1000 / (1000 + p1.z)) + canvas.width / 2,
-              (p1.y - canvas.height / 2) * (1000 / (1000 + p1.z)) + canvas.height / 2
-            )
-            ctx.lineTo(
-              (p2.x - canvas.width / 2) * (1000 / (1000 + p2.z)) + canvas.width / 2,
-              (p2.y - canvas.height / 2) * (1000 / (1000 + p2.z)) + canvas.height / 2
-            )
+            ctx.strokeStyle = `rgba(99, 102, 241, ${opacity})`
+            ctx.lineWidth = 0.8
+            ctx.moveTo(particles[i].x, particles[i].y)
+            ctx.lineTo(particles[j].x, particles[j].y)
             ctx.stroke()
-            ctx.shadowBlur = 0
           }
-        })
+        }
+      }
+
+      particles.forEach((p) => {
+        p.update()
+        p.draw()
       })
 
       animationFrameId = requestAnimationFrame(animate)
@@ -117,6 +132,10 @@ const AnimatedBackground = () => {
 
     return () => {
       window.removeEventListener('resize', resizeCanvas)
+      window.removeEventListener('mousemove', handleMouseMove)
+      window.removeEventListener('touchmove', handleTouchMove)
+      window.removeEventListener('mouseleave', handleMouseLeave)
+      window.removeEventListener('touchend', handleMouseLeave)
       cancelAnimationFrame(animationFrameId)
     }
   }, [])
